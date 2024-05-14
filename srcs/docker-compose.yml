@@ -1,26 +1,5 @@
 version: "3.5"
 
-networks:
-  app-network:
-    name: app-network
-    driver: bridge
-
-volumes:
-  wp:
-    driver: local
-    name: wp
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/crendeha/data/wordpress
-  db:
-    driver: local
-    name: db
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/crendeha/data/mariadb
-
 services:
   mariadb:
     container_name: mariadb
@@ -30,7 +9,7 @@ services:
     volumes:
       - db:/var/lib/mysql
     networks:
-      - app-network
+      - inception
     restart: unless-stopped
 
   wordpress:
@@ -43,7 +22,7 @@ services:
     volumes:
       - wp:/var/www/html
     networks:
-      - app-network
+      - inception
     restart: unless-stopped
 
   nginx:
@@ -56,5 +35,26 @@ services:
     volumes:
       - wp:/var/www/html
     networks:
-      - app-network
+      - inception
     restart: unless-stopped
+
+volumes:
+  wp:
+    driver: local
+    name: wp
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mkoroglu/data/wordpress
+  db:
+    driver: local
+    name: db
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/mkoroglu/data/mariadb
+
+networks:
+  inception:
+    name: inception
+    driver: bridge
